@@ -10,6 +10,7 @@ const path = require('path');
 const me = require('./routes/me');
 const admin = require('./routes/admin');
 const login = require('./routes/login');
+const logout = require('./routes/logout')
 const register = require('./routes/register');
 const vote = require('./routes/vote');
 const candidate = require('./routes/candidates');
@@ -23,13 +24,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: 'http://localhost:3001',
-    credentials: true,
-  })
-);
-
 // connec to db
 const connectToMongo = async () => {
   const options = { useNewUrlParser: true };
@@ -64,6 +58,7 @@ app.use('/api/login', login);
 app.use('/api/admin', adminAuthentication, admin);
 app.use('/api/vote', checkForAuth, vote);
 app.use('/api/candidates', checkForAuth, candidate);
+app.use('/api/logout', checkForAuth, logout);
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, './frontend/out', 'index.html'));
 });
